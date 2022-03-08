@@ -1,5 +1,4 @@
 <template>
-  <h1>{{todosRef.length}}</h1>
   <div id="app">
     <section class="todoapp">
       <header class="header">
@@ -9,6 +8,8 @@
           autofocus=""
           autocomplete="off"
           placeholder="What needs to be done?"
+          v-model="newTodoRef"
+          @keyup.enter="addTodo"
         />
       </header>
       <section class="main">
@@ -60,14 +61,15 @@
 </template>
 
 <script>
-  import useTodoList from "./composition/useTodoList";
+  import useTodoList from "./composition/useTodoList.js";
+  import useNewTodo from "./composition/useNewTodo.js";
 
   export default {
     setup() {
       const {todosRef} = useTodoList();
 
       return {
-        todosRef
+        ...useNewTodo(todosRef)
       }
     }
   }
