@@ -1,4 +1,5 @@
 <template>
+  <h1>{{todosRef.length}}</h1>
   <div id="app">
     <section class="todoapp">
       <header class="header">
@@ -59,5 +60,15 @@
 </template>
 
 <script>
-  export default {}
+  import useTodoList from "./composition/useTodoList";
+
+  export default {
+    setup() {
+      const {todosRef} = useTodoList();
+
+      return {
+        todosRef
+      }
+    }
+  }
 </script>
