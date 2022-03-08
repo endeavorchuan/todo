@@ -36,8 +36,7 @@
             </div>
             <input
               v-model="todo.title"
-              @blur="doneEdit"
-              @keyup.enter="doneEdit"
+              @keyup.enter="doneEdit(todo)"
               @keyup.esc="cancelEdit(todo)"
               class="edit"
               type="text"
