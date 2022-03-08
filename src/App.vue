@@ -13,21 +13,35 @@
         />
       </header>
       <section class="main">
-        <input id="toggle-all " class="toggle-all" type="checkbox" />
+        <input
+          id="toggle-all"
+          class="toggle-all"
+          type="checkbox"
+          v-model="allDoneRef"
+        />
         <label for="toggle-all">Mark all as complete</label>
         <ul class="todo-list">
           <li
             class="todo"
-            :class="{completed: todo.completed}"
+            :class="{
+              completed: todo.completed,
+              editing: todo === editingTodoRef}"
             v-for="todo in filteredTodosRef"
             :key="todo.id"
           >
             <div class="view">
               <input class="toggle" type="checkbox" v-model="todo.completed" />
-              <label>{{ todo.title }}</label>
+              <label @dblclick="editTodo(todo)">{{ todo.title }}</label>
               <button class="destroy"></button>
             </div>
-            <input class="edit" type="text" />
+            <input
+              v-model="todo.title"
+              @blur="doneEdit"
+              @keyup.enter="doneEdit"
+              @keyup.esc="cancelEdit(todo)"
+              class="edit"
+              type="text"
+            />
         </ul>
       </section>
       <footer class="footer">
@@ -52,6 +66,7 @@
   import useTodoList from "./composition/useTodoList.js";
   import useNewTodo from "./composition/useNewTodo.js";
   import useFilter from "./composition/useFilter.js";
+  import useEditTodo from "./composition/useEditTodo";
 
   export default {
     setup() {
@@ -59,7 +74,8 @@
 
       return {
         ...useNewTodo(todosRef),
-        ...useFilter(todosRef)
+        ...useFilter(todosRef),
+        ...useEditTodo(todosRef)
       }
     }
   }
