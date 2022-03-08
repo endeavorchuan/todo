@@ -33,3 +33,21 @@ export function fetch() {
 export function save(todos) {
   localStorage.setItem(LOACL_KEY, JSON.stringify(todos))
 }
+
+/**
+ * 辅助函数，根据传入的状态筛选当前列表
+ * @param todos
+ * @param visibility
+ * @returns {Error|*}
+ */
+export function filter(todos, visibility = "all") {
+  if(visibility === "all") {
+    return todos;
+  } else if(visibility === "active") {
+    return todos.filter((it) => !it.completed);
+  } else if(visibility === "completed") {
+    return todos.filter((it) => it.completed);
+  }
+
+  return new Error("invalid visibility value");
+}
