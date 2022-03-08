@@ -12,7 +12,7 @@
           @keyup.enter="addTodo"
         />
       </header>
-      <section class="main">
+      <section class="main" v-show="todosRef.length>0" >
         <input
           id="toggle-all"
           class="toggle-all"
@@ -32,7 +32,7 @@
             <div class="view">
               <input class="toggle" type="checkbox" v-model="todo.completed" />
               <label @dblclick="editTodo(todo)">{{ todo.title }}</label>
-              <button class="destroy"></button>
+              <button @click="remove(todo)" class="destroy"></button>
             </div>
             <input
               v-model="todo.title"
@@ -43,7 +43,7 @@
             />
         </ul>
       </section>
-      <footer class="footer">
+      <footer class="footer" v-show="todosRef.length>0" >
       <span class="todo-count">
         <strong>{{ remainingRef }}</strong>
         <span>item{{ remainingRef === 1 ? "" : "s" }} left</span>
@@ -53,7 +53,7 @@
           <li><a href="#/active" :class="{selected: visibilityRef === 'active'}">Active</a></li>
           <li><a href="#/completed" :class="{selected: visibilityRef === 'completed'}">Completed</a></li>
         </ul>
-        <button class="clear-completed" v-show="completedRef > 0">
+        <button @click="removeCompleted" class="clear-completed" v-show="completedRef > 0">
           Clear completed
         </button>
       </footer>
@@ -66,15 +66,18 @@
   import useNewTodo from "./composition/useNewTodo.js";
   import useFilter from "./composition/useFilter.js";
   import useEditTodo from "./composition/useEditTodo";
+  import useRemoveTodo from "./composition/useRemoveTodo";
 
   export default {
     setup() {
       const {todosRef} = useTodoList();
 
       return {
+        todosRef,
         ...useNewTodo(todosRef),
         ...useFilter(todosRef),
-        ...useEditTodo(todosRef)
+        ...useEditTodo(todosRef),
+        ...useRemoveTodo(todosRef)
       }
     }
   }
